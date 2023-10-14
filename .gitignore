@@ -3,7 +3,5 @@
 *.pdf
 */*/.vscode
 */.vscode
-
 /.vscode
 *.json
-Homework1/.vscode/c_cpp_properties.json
