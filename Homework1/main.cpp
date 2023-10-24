@@ -6,6 +6,8 @@
 
 constexpr double MY_PI = 3.1415926;
 
+constexpr double MY_ANGLE = 180.0 * MY_PI;
+
 Eigen::Matrix4f get_view_matrix(Eigen::Vector3f eye_pos)
 {
     Eigen::Matrix4f view = Eigen::Matrix4f::Identity();
@@ -25,22 +27,52 @@ Eigen::Matrix4f get_model_matrix(float rotation_angle)
 
     // TODO: Implement this function
     // Create the model matrix for rotating the triangle around the Z axis.
+    float rotation_angle_radian = rotation_angle*MY_PI/180;
+    model(0,0) = cos(rotation_angle_radian); 
+    model(0,1) = -sin(rotation_angle_radian);
+    model(1,0) = sin(rotation_angle_radian);
+    model(1,1) = cos(rotation_angle_radian);
+    // std::cout<<"Rotate Model: "<<std::endl<<model<<std::endl;
     // Then return it.
 
     return model;
 }
 
+
 Eigen::Matrix4f get_projection_matrix(float eye_fov, float aspect_ratio,
                                       float zNear, float zFar)
 {
     // Students will implement this function
-
+ 
     Eigen::Matrix4f projection = Eigen::Matrix4f::Identity();
-
+ 
     // TODO: Implement this function
     // Create the projection matrix for the given parameters.
     // Then return it.
-
+ 
+    float t = abs(zNear)*tan(eye_fov/2.0);  //抄代码没抄对的下场，这里的eye_fov已经是弧度值
+    float b = -t;
+    float r = aspect_ratio * t;
+    float l = -r;
+ 
+    Matrix4f Orth_Thran,Orth_Scale;
+    Orth_Scale << 2/(r-l),0,0,0,
+                0,2/(t-b),0,0,
+                0,0,2/(zNear-zFar),0,
+                0,0,0,1;
+    Orth_Thran << 1,0,0,-(r+l)/2,
+                0,1,0,-(t+b)/2,
+                0,0,1,-(zNear+zFar)/2,
+                0,0,0,1;
+ 
+    Matrix4f pers;
+    pers << zNear,0,0,0,
+            0,zNear,0,0,
+            0,0,zNear+zFar,-zNear*zFar,
+            0,0,1,0;
+    
+    projection = Orth_Scale*Orth_Thran*pers*projection;
+    
     return projection;
 }
 

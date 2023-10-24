@@ -14,6 +14,6 @@ int main(){
                      std::sin(rad),std::cos(rad),2.0,
                     0.0,0.0,1.0;
     std::cout << tranformation * v << std::endl;    //计算顺序是从右向左
-
+    
     return 0;
 }
