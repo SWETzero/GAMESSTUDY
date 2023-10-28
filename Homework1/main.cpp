@@ -8,13 +8,18 @@ constexpr double MY_PI = 3.1415926;
 
 constexpr double MY_ANGLE = 180.0 * MY_PI;
 
+using namespace std;
+
 Eigen::Matrix4f get_view_matrix(Eigen::Vector3f eye_pos)
 {
     Eigen::Matrix4f view = Eigen::Matrix4f::Identity();
 
     Eigen::Matrix4f translate;
-    translate << 1, 0, 0, -eye_pos[0], 0, 1, 0, -eye_pos[1], 0, 0, 1,
-        -eye_pos[2], 0, 0, 0, 1;
+    translate << 
+    1, 0, 0, -eye_pos[0], 
+    0, 1, 0, -eye_pos[1], 
+    0, 0, 1,-eye_pos[2], 
+    0, 0, 0, 1;
 
     view = translate * view;
 
@@ -50,7 +55,7 @@ Eigen::Matrix4f get_projection_matrix(float eye_fov, float aspect_ratio,
     // Create the projection matrix for the given parameters.
     // Then return it.
  
-    float t = abs(zNear)*tan(eye_fov/2.0);  //抄代码没抄对的下场，这里的eye_fov已经是弧度值
+    float t = -abs(zNear)*tan(eye_fov/2.0);  //抄代码没抄对的下场，这里的eye_fov已经是弧度值
     float b = -t;
     float r = aspect_ratio * t;
     float l = -r;
